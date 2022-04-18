@@ -56,60 +56,26 @@ export default function App({ navigation }) {
 
   //Check submition
   const checkSubmitUpdateState = (inputStr, randomNumber) => {
-    let correctsObj = {};
-    let numAndLocObj = {};
-    let inputObj = {};
     let numberObj = {};
     for (let i = 0; i < randomNumber.length; i++) {
-      
-      numberObj[randomNumber[i]] = 'not checked'; //number and if checked
-      if (randomNumber[i] === inputStr[i]) { //same location
+      //Correct location (deletes from input array)
+      if (randomNumber[i] === inputStr[i]) {
         setNumAndLocation((numAndLocation) => numAndLocation + 1);
-        numberObj[randomNumber[i]] = 'checked';
-        console.log("numAndLocation", inputStr[i])
         inputStr[i] = null;
-        //numberObj[inputStr[j]] = 99
-      
-    }}
-
-    for (let j = 0; j < inputStr.length; j++) {
-      if ((numberObj[inputStr[j]]) && (numberObj[inputStr[j]] !=='checked')) {
-        setCorrectNum((correctNum) => correctNum + 1);
-
+        //The rest placed in randomNumber object with quantity
+      } else {
+        if (numberObj[randomNumber[i]]) {
+          numberObj[randomNumber[i]]++;
+        } else numberObj[randomNumber[i]] = 1;
       }
     }
-
-    console.log(numberObj)
-    // for (let i = 0; i < inputStr.length; i++) {
-    //   if (randomNumber[i] === inputStr[i]) {
-    //     numAndLocObj[inputStr[i]] = 1
-    //     setNumAndLocation((numAndLocation) => numAndLocation + 1);
-    //   } else if ((randomNumber.indexOf(inputStr[i]) !== -1 ) && (correctsObj[inputStr[i]] !== 1) && (numAndLocObj[inputStr[i]] !== 1)) {
-    //     correctsObj[inputStr[i]] = 1
-        
-
-    //     setCorrectNum((correctNum) => correctNum + 1);
-    //   }
-    // }
-    
-
-    // for (let j = 0; j < inputStr.length; j++) {
-    //   console.log("inside of for:", inputStr[j])
-    //   if (numberObj[inputStr[j]] !== undefined) {//if exists
-    //     console.log("exists", inputStr[j])
-    //     if (randomNumber[j] === inputStr[j]) { //same location
-    //       setNumAndLocation((numAndLocation) => numAndLocation + 1);
-    //       console.log("numAndLocation", inputStr[j])
-    //       //numberObj[inputStr[j]] = 99
-
-    //     } else if (numberObj[inputStr[j]] !== j) {
-    //       setCorrectNum((correctNum) => correctNum + 1);
-    //       //numberObj[inputStr[j]] = 99
-
-    //     }
-    //   }
-    // }
-
+    //Checks correct numbers with wrong location
+    for (let j = 0; j < inputStr.length; j++) {
+      if (numberObj[inputStr[j]]) {
+        setCorrectNum((correctNum) => correctNum + 1);
+        numberObj[inputStr[j]]--;
+      }
+    }
   };
   // On Click
   const clickHandler = () => {
@@ -151,7 +117,7 @@ export default function App({ navigation }) {
   //Sets history array
   useEffect(() => {
     if (numAndLocation === CODE_LENGTH) {
-      Alert.alert("GOOD JOB! You Won CutiePie!", ":)", [
+      Alert.alert("GOOD JOB!", ":)", [
         {
           text: "Quit",
           onPress: () => navigation.goBack(),
@@ -168,7 +134,7 @@ export default function App({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>The number is: {randomNumber}</Text> 
+      <Text style={styles.text}>The number is: {randomNumber}</Text>
       <Text style={styles.text}>Attempts left: {attempts}</Text>
       <Text style={styles.title}>Guess your number</Text>
       <CodeField
