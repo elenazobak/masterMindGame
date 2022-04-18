@@ -25,9 +25,10 @@ import {
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
 
-export default function App({ navigation }) {
+export default function App({ route, navigation }) {
   const [randomNumber, setRandomNumber] = useState();
-  const ATTEMPTS = 10;
+  const ATTEMPTS = route.params.attempts;
+  const CELL_COUNT = route.params.codeLength;
   const [attempts, setAttempts] = useState(ATTEMPTS);
   const [userInput, setUserInput] = useState("");
   const [numAndLocation, setNumAndLocation] = useState(0);
@@ -39,13 +40,13 @@ export default function App({ navigation }) {
     setValue,
   });
   const [history, setHistory] = useState([]);
-  const CELL_COUNT = 4;
-  const CODE_LENGTH = 4;
+  
+  //const CODE_LENGTH = 4;
 
   //Get the random number
   const fetchNumber = async () => {
     const { data: random } = await axios.get(
-      `https://www.random.org/integers/?num=${CODE_LENGTH}&min=0&max=7&col=4&base=10&format=plain&rnd=new`
+      `https://www.random.org/integers/?num=${CELL_COUNT}&min=0&max=7&col=4&base=10&format=plain&rnd=new`
     );
     setRandomNumber(random.replace(/\s/g, ""));
   };
@@ -62,7 +63,7 @@ export default function App({ navigation }) {
       if (randomNumber[i] === inputStr[i]) {
         setNumAndLocation((numAndLocation) => numAndLocation + 1);
         inputStr[i] = null;
-        //The rest placed in randomNumber object with quantity
+        //The rest placed in randomNumber Object with their quantity
       } else {
         if (numberObj[randomNumber[i]]) {
           numberObj[randomNumber[i]]++;
@@ -82,7 +83,7 @@ export default function App({ navigation }) {
     Keyboard.dismiss();
     if (userInput) {
       let inputStr = userInput.toString();
-      if (inputStr.length === CODE_LENGTH) {
+      if (inputStr.length === CELL_COUNT) {
         setCorrectNum(0);
         setNumAndLocation(0);
         checkSubmitUpdateState(inputStr, randomNumber);
@@ -99,9 +100,9 @@ export default function App({ navigation }) {
         } else {
           setAttempts((attempts) => attempts - 1);
         }
-      } else Alert.alert(`Please enter a ${CODE_LENGTH} digit number`);
+      } else Alert.alert(`Please enter a ${CELL_COUNT} digit number`);
     } else {
-      Alert.alert(`Please enter a ${CODE_LENGTH} digit number`);
+      Alert.alert(`Please enter a ${CELL_COUNT} digit number`);
     }
   };
 
@@ -116,7 +117,7 @@ export default function App({ navigation }) {
 
   //Sets history array
   useEffect(() => {
-    if (numAndLocation === CODE_LENGTH) {
+    if (numAndLocation === CELL_COUNT) {
       Alert.alert("GOOD JOB!", ":)", [
         {
           text: "Quit",
@@ -134,7 +135,7 @@ export default function App({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>The number is: {randomNumber}</Text>
+      {/* <Text style={styles.text}>The number is: {randomNumber}</Text> */}
       <Text style={styles.text}>Attempts left: {attempts}</Text>
       <Text style={styles.title}>Guess your number</Text>
       <CodeField
