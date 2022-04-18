@@ -29,7 +29,7 @@ export default function App({ navigation }) {
   const [randomNumber, setRandomNumber] = useState();
   const ATTEMPTS = 10;
   const [attempts, setAttempts] = useState(ATTEMPTS);
-  const [userInput, setUserInput] = useState();
+  const [userInput, setUserInput] = useState("");
   const [numAndLocation, setNumAndLocation] = useState(0);
   const [correctNum, setCorrectNum] = useState(0);
   const [value, setValue] = useState("");
@@ -56,15 +56,47 @@ export default function App({ navigation }) {
 
   //Check submition
   const checkSubmitUpdateState = (inputStr, randomNumber) => {
-    for (let i = 0; i < inputStr.length; i++) {
-      if (randomNumber[i] === inputStr[i]) {
-        setNumAndLocation((numAndLocation) => numAndLocation + 1);
-      } else if (randomNumber.indexOf(inputStr[i]) !== -1) {
-        setCorrectNum((correctNum) => correctNum + 1);
+    let correctsObj = {};
+    let numAndLocObj = {};
+    let inputObj = {};
+    let numberObj = {};
+    for (let i = 0; i < randomNumber.length; i++) {
+      
+      numberObj[randomNumber[i]] = i; 
+    }
+    console.log(numberObj)
+    // for (let i = 0; i < inputStr.length; i++) {
+    //   if (randomNumber[i] === inputStr[i]) {
+    //     numAndLocObj[inputStr[i]] = 1
+    //     setNumAndLocation((numAndLocation) => numAndLocation + 1);
+    //   } else if ((randomNumber.indexOf(inputStr[i]) !== -1 ) && (correctsObj[inputStr[i]] !== 1) && (numAndLocObj[inputStr[i]] !== 1)) {
+    //     correctsObj[inputStr[i]] = 1
+        
+
+    //     setCorrectNum((correctNum) => correctNum + 1);
+    //   }
+    // }
+    
+
+    for (let j = 0; j < inputStr.length; j++) {
+      console.log("inside of for:", inputStr[j])
+      if (numberObj[inputStr[j]] !== undefined) {//if exists
+        console.log("exists", inputStr[j])
+        if (randomNumber[j] === inputStr[j]) { //same location
+          setNumAndLocation((numAndLocation) => numAndLocation + 1);
+          console.log("numAndLocation", inputStr[j])
+          //numberObj[inputStr[j]] = 99
+
+        } else if (numberObj[inputStr[j]] !== j) {
+          setCorrectNum((correctNum) => correctNum + 1);
+          //numberObj[inputStr[j]] = 99
+
+        }
       }
     }
-  };
 
+  };
+  // On Click
   const clickHandler = () => {
     Keyboard.dismiss();
     if (userInput) {
@@ -98,7 +130,7 @@ export default function App({ navigation }) {
     setNumAndLocation(0);
     setHistory([]);
     setAttempts(ATTEMPTS);
-    setUserInput(0);
+    setUserInput("");
   };
 
   //Sets history array
@@ -115,19 +147,19 @@ export default function App({ navigation }) {
     } else if (attempts < ATTEMPTS) {
       let historyObj = { num: userInput, result: [numAndLocation, correctNum] };
       setHistory([...history, historyObj]);
-      setUserInput(0);
+      setUserInput("");
     }
   }, [attempts]);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Text style={styles.text}>The number is: {randomNumber}</Text> */}
+      <Text style={styles.text}>The number is: {randomNumber}</Text> 
       <Text style={styles.text}>Attempts left: {attempts}</Text>
       <Text style={styles.title}>Guess your number</Text>
       <CodeField
         ref={ref}
         {...props}
-        value={userInput}
+        value={userInput.toString()}
         onChangeText={setUserInput}
         cellCount={CELL_COUNT}
         rootStyle={styles.codeFieldRoot}
@@ -165,7 +197,7 @@ const styles = StyleSheet.create({
   button: {
     width: "20%",
     backgroundColor: "#D1F8F3",
-    padding: 15,
+    padding: 10,
     borderRadius: 10,
     alignItems: "center",
     marginLeft: 150,
