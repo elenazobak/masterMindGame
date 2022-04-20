@@ -17,6 +17,7 @@ const axios = require("axios");
 import { useDispatch } from "react-redux";
 import CodeInput from "react-native-code-input";
 import HistoryCell from "./HistoryCell";
+import MyTimer from "./MyTimer";
 
 import {
   CodeField,
@@ -40,7 +41,7 @@ export default function App({ route, navigation }) {
     setValue,
   });
   const [history, setHistory] = useState([]);
-  
+
   //const CODE_LENGTH = 4;
 
   //Get the random number
@@ -48,11 +49,15 @@ export default function App({ route, navigation }) {
     const { data: random } = await axios.get(
       `https://www.random.org/integers/?num=${CELL_COUNT}&min=0&max=7&col=4&base=10&format=plain&rnd=new`
     );
+    console.log(randomNumber);
     setRandomNumber(random.replace(/\s/g, ""));
   };
 
   useEffect(() => {
     fetchNumber();
+    if (!randomNumber) {
+      setRandomNumber("1234r");
+    }
   }, []);
 
   //Check submition
@@ -82,20 +87,20 @@ export default function App({ route, navigation }) {
   const clickHandler = () => {
     Keyboard.dismiss();
     if (userInput) {
-      let inputStr = userInput.toString();
-      if (inputStr.length === CELL_COUNT) {
+      if (userInput.length === CELL_COUNT) {
         setCorrectNum(0);
         setNumAndLocation(0);
-        checkSubmitUpdateState(inputStr, randomNumber);
+        let tempUserInput = userInput;
+        checkSubmitUpdateState(tempUserInput, randomNumber);
         //Attepts - game over
-        if (attempts === 1) {
-          Alert.alert("YOU LOST, The number_ is:", randomNumber, ":)", [
+        if (attempts === 1 && userInput !== randomNumber) {
+          Alert.alert(`You Lost! The number was: ${randomNumber}`, `:(`, [
             {
-              text: "Bye!",
+              text: "Quit",
               onPress: () => navigation.goBack(),
               style: "cancel",
             },
-            { text: "Try Again", onPress: () => resetGame() },
+            { text: "Play Again", onPress: () => resetGame() },
           ]);
         } else {
           setAttempts((attempts) => attempts - 1);
@@ -135,7 +140,8 @@ export default function App({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Text style={styles.text}>The number is: {randomNumber}</Text> */}
+      {/* <MyTimer />  */}
+      {/* <Text style={styles.text}>{randomNumber}</Text> */}
       <Text style={styles.text}>Attempts left: {attempts}</Text>
       <Text style={styles.title}>Guess your number</Text>
       <CodeField
@@ -161,11 +167,19 @@ export default function App({ route, navigation }) {
         <Text>Submit</Text>
       </TouchableOpacity>
       <ScrollView keyboardShouldPersistTaps="handled">
-        <View style={styles.history}>
-          {history.map((obj, index) => (
-            <HistoryCell key={index} number={obj.num} result={obj.result} />
-          ))}
-        </View>
+        <View style={styles.historyText}>
+          {/* <Text>Correct and well places</Text>
+          <Text>Correct and wrongly places</Text> */}
+          </View>
+          <View style={styles.history}>
+            {history
+              .slice(0)
+              .reverse()
+              .map((obj, index) => (
+                <HistoryCell key={index} number={obj.num} result={obj.result} />
+              ))}
+          </View>
+        
       </ScrollView>
     </SafeAreaView>
   );
@@ -183,6 +197,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     marginLeft: 150,
+  },
+  historyText: {
+    flexDirection: "row",
+    alignItems: "center",
+
   },
   history: {
     paddingTop: 10,
