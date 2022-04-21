@@ -42,7 +42,7 @@ export default function App({ route, navigation }) {
   });
   const [history, setHistory] = useState([]);
 
-  //const CODE_LENGTH = 4;
+  
 
   //Get the random number
   const fetchNumber = async () => {
@@ -61,7 +61,7 @@ export default function App({ route, navigation }) {
     
   }, []);
 
-  //Check submition
+  //Check submission
   const checkSubmitUpdateState = (tempUserInput, randomNumber) => {
     let numberObj = {};
     for (let i = 0; i < randomNumber.length; i++) {
