@@ -5,17 +5,17 @@ const HistoryCell = (props) => {
   return (
     <View style={styles.container}>
     <View style={styles.item}>
-      <View style={styles.itemLeft}>
+      <View >
         <Text style={styles.itemText}>{props.number}</Text>
       </View>
     </View>
     <View style={styles.item2}>
-           <Text style={styles.resultsText}>Correct and well placed: </Text>
-           <Text style={styles.resultsNumText}>{props.result[0]}</Text>
+           <Text style={styles.resultsText1}>Correct and well placed: </Text>
+           <Text style={styles.resultsNumText1}>{props.result[0]}</Text>
       </View>
       <View style={styles.item2}>
-           <Text style={styles.resultsText}>Correct and wrongly placed: </Text>
-           <Text style={styles.resultsNumText}>{props.result[1]}</Text>
+           <Text style={styles.resultsText2}>Correct and wrongly placed: </Text>
+           <Text style={styles.resultsNumText2}>{props.result[1]}</Text>
       </View>
     </View>
   );
@@ -45,11 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginBottom: 5,
     width: '25%',
-  },
-  itemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    flexWrap: "wrap",
+    padding: 5,
   },
   itemText: {
     fontWeight: "bold",
@@ -57,16 +53,28 @@ const styles = StyleSheet.create({
     color: "#28A8B3",
     fontFamily: "Avenir",
   },
-  resultsText:{
-    color: "#357F2F",
+  resultsText1:{
+    color: "#28A8B3",
     fontSize: 13,
     width: 50,
     lineHeight: 13,
     textAlign: "center",
   },
-  resultsNumText:{
-    color: "#FB3E28",
-    fontSize: 20,
+  resultsNumText1:{
+    color: "#28A8B3",
+    fontSize: 21,
+    fontWeight: "bold",
+  },
+  resultsText2:{
+    color: "#8b9698",
+    fontSize: 13,
+    width: 50,
+    lineHeight: 13,
+    textAlign: "center",
+  },
+  resultsNumText2:{
+    color: "#8b9698",
+    fontSize: 21,
     fontWeight: "bold",
   },
 });

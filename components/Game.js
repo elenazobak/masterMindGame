@@ -47,10 +47,9 @@ export default function App({ route, navigation }) {
     const { data: random } = await axios.get(
       `https://www.random.org/integers/?num=${CELL_COUNT}&min=0&max=7&col=4&base=10&format=plain&rnd=new`
     );
-
     setRandomNumber(random.replace(/\s/g, ""));
   };
-
+  //Call to get random number
   useEffect(() => {
     fetchNumber();
     if (!randomNumber) {
@@ -132,7 +131,6 @@ export default function App({ route, navigation }) {
 
   //Sets history array
   useEffect(() => {
-    console.log(randomNumber);
     if (numAndLocation === CELL_COUNT) {
       Alert.alert("GOOD JOB!", ":)", [
         {
@@ -153,7 +151,7 @@ export default function App({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       {/* <MyTimer />  */}
       {/* <Text style={styles.text}>{randomNumber}</Text> */}
-      <Text style={styles.text}>Attempts left: {attempts}</Text>
+      <Text style={styles.text}>Attempts: {attempts}</Text>
       <Text style={styles.title}>Guess your number</Text>
       <CodeField
         ref={ref}
@@ -175,14 +173,9 @@ export default function App({ route, navigation }) {
         )}
       />
       <TouchableOpacity style={styles.button} onPress={clickHandler}>
-        <Text>Submit</Text>
+        <Text style={styles.text}>Submit</Text>
       </TouchableOpacity>
       <ScrollView keyboardShouldPersistTaps="handled">
-      {/* <View style={styles.resultsTextWrapper}>
-           <Text style={styles.resultsText}>Correct and well placed: </Text>
-           <Text style={styles.resultsText}>Correct and wrongly placed: </Text>
-
-      </View> */}
         <View style={styles.history}>
           {history
             .slice(0)
@@ -199,41 +192,59 @@ export default function App({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F3F3F3",
+    backgroundColor: "#b3eefb",
   },
   button: {
-    width: "20%",
-    backgroundColor: "#D1F8F3",
-    padding: 10,
-    borderRadius: 10,
+    backgroundColor: "#15d5c1",
+    borderRadius: 30,
+    alignSelf: "center",
+    shadowColor: "#2C594A",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    margin: 20,
+    width: 120,
+    height: 40,
     alignItems: "center",
-    marginLeft: 150,
+    justifyContent: "center",
+    fontFamily: "bold",
   },
-  
-  
   history: {
-    paddingTop: 10,
-    paddingHorizontal: 20,
+    paddingTop: 5,
+    paddingHorizontal: 10,
   },
   text: {
-    color: "teal",
     fontSize: 20,
-    margin: 10,
-    textAlign: "center",
-    justifyContent: "space-evenly",
+    fontWeight: "bold",
+    color: "teal",
+    fontFamily: "Futura",
+    padding: 5,
+    textAlign: "right",
   },
-  title: { textAlign: "center", fontSize: 30 },
+  title: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 28,
+    fontFamily: "Futura",
+    fontWeight: "bold",
+    padding: 10,
+    margin: 10,
+  },
   codeFieldRoot: {
-    margin: 30,
+    margin: 10,
     justifyContent: "space-evenly",
   },
   cell: {
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
     fontSize: 20,
-    borderWidth: 2,
-    borderColor: "#20BAD7",
+    borderWidth: 3,
+    borderColor: "#74e2f9",
     textAlign: "center",
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#126f83",
   },
   focusCell: {
     borderColor: "#1B90A5",
