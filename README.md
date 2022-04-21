@@ -1,6 +1,6 @@
 # Mastermind Game App
 
-![Logo](/assets/_logo_.png)
+![Logo](/assets/_logo.png)
 
 ## Table of Contents
 
