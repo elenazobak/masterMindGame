@@ -49,25 +49,26 @@ export default function App({ route, navigation }) {
     const { data: random } = await axios.get(
       `https://www.random.org/integers/?num=${CELL_COUNT}&min=0&max=7&col=4&base=10&format=plain&rnd=new`
     );
-    console.log(randomNumber);
+    
     setRandomNumber(random.replace(/\s/g, ""));
   };
 
   useEffect(() => {
     fetchNumber();
     if (!randomNumber) {
-      setRandomNumber("1234r");
+      setRandomNumber("1234");
     }
+    
   }, []);
 
   //Check submition
-  const checkSubmitUpdateState = (inputStr, randomNumber) => {
+  const checkSubmitUpdateState = (tempUserInput, randomNumber) => {
     let numberObj = {};
     for (let i = 0; i < randomNumber.length; i++) {
       //Correct location (deletes from input array)
-      if (randomNumber[i] === inputStr[i]) {
+      if (randomNumber[i] === tempUserInput[i]) {
         setNumAndLocation((numAndLocation) => numAndLocation + 1);
-        inputStr[i] = null;
+        tempUserInput[i] = null;
         //The rest placed in randomNumber Object with their quantity
       } else {
         if (numberObj[randomNumber[i]]) {
@@ -76,18 +77,19 @@ export default function App({ route, navigation }) {
       }
     }
     //Checks correct numbers with wrong location
-    for (let j = 0; j < inputStr.length; j++) {
-      if (numberObj[inputStr[j]]) {
+    for (let j = 0; j < tempUserInput.length; j++) {
+      if (numberObj[tempUserInput[j]]) {
         setCorrectNum((correctNum) => correctNum + 1);
-        numberObj[inputStr[j]]--;
+        numberObj[tempUserInput[j]]--;
       }
     }
   };
+
   // On Click
   const clickHandler = () => {
     Keyboard.dismiss();
     if (userInput) {
-      if (userInput.length === CELL_COUNT) {
+      if (userInput.length === CELL_COUNT ) {
         setCorrectNum(0);
         setNumAndLocation(0);
         let tempUserInput = userInput;
@@ -110,6 +112,15 @@ export default function App({ route, navigation }) {
       Alert.alert(`Please enter a ${CELL_COUNT} digit number`);
     }
   };
+ 
+  //checking if user input is in range (0-7)
+  const checkInput = (text) => {
+     if (text % 10 < 8) {
+     setUserInput(text)
+     } else {
+       alert ('Enter numbers between 0-7')
+     }
+  }
 
   //Reset Game
   const resetGame = () => {
@@ -122,6 +133,7 @@ export default function App({ route, navigation }) {
 
   //Sets history array
   useEffect(() => {
+    console.log(randomNumber);
     if (numAndLocation === CELL_COUNT) {
       Alert.alert("GOOD JOB!", ":)", [
         {
@@ -148,7 +160,7 @@ export default function App({ route, navigation }) {
         ref={ref}
         {...props}
         value={userInput.toString()}
-        onChangeText={setUserInput}
+        onChangeText={checkInput}
         cellCount={CELL_COUNT}
         rootStyle={styles.codeFieldRoot}
         keyboardType="number-pad"

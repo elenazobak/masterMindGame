@@ -36,7 +36,7 @@ Project link: https://github.com/elenazobak/masterMindGame
 - Download the repo ZIP to your computer
 - Unzip the ZIP file to a new folder
 - Open the folder in [Visual Studio Code](https://code.visualstudio.com/)
-- Open VS code terminal and run `npm install`
+- Open VS code terminal and run npm install (prerequisite: [Node.js](https://nodejs.org/en/download/))
 - Download [Expo Go](https://expo.dev/client) on your smartphone OR if you have XCode, the simulator will run there
 - Run `npm start`
 - If using Expo Go: use your phone camera to scan the QR code and enjoy!
