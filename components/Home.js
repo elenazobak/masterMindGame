@@ -3,16 +3,23 @@ import React, { useEffect, useState } from "react";
 import { borderLeftColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-const Home = ({ navigation }) => {
+export default function Home ({ route, navigation }) => {
   const [attempts, setAttepts] = useState(10);
   const [codeLength, setCodeLength] = useState(4);
   const [minutes, setMinutes] = useState(1);
   const bulbPic = require('../assets/bulb.png');
+  const didWin = route;
+
+//   useEffect(() => {
+//     console.log(route.params)
+//   }, []);
+  
 
 
   const decreaseCodeLength = () => {
     if (codeLength > 1) {
       setCodeLength(() => codeLength - 1);
+      console.log(route.params)
     }
   };
   const increaseCodeLength = () => {
@@ -41,9 +48,18 @@ const Home = ({ navigation }) => {
     }
   };
 
+ const userDidWin = () => {
+    if (didWin) {
+        return 
+         <View></View>
+          
+    } 
+ }
+
   return (
     <View style={styles.container}>
         <Text style={styles.title}>Mastermind</Text>
+        {/* {route.params.didWin ? <Button title={'hey'} /> : null} */}
         <View style={styles.image} >
             
             <Image style={styles.image}  source={bulbPic}/>
@@ -105,7 +121,7 @@ const Home = ({ navigation }) => {
   );
 };
 
-export default Home;
+// export default Home;
 
 const styles = StyleSheet.create({
   container: {

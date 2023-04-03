@@ -27,6 +27,7 @@ import {
 } from "react-native-confirmation-code-field";
 
 export default function App({ route, navigation }) {
+  const [didWin, setDidWin] = useState();
   const [randomNumber, setRandomNumber] = useState();
   const ATTEMPTS = route.params.attempts;
   const CELL_COUNT = route.params.codeLength;
@@ -132,10 +133,13 @@ export default function App({ route, navigation }) {
   //Sets history array
   useEffect(() => {
     if (numAndLocation === CELL_COUNT) {
+      setDidWin(true);
       Alert.alert("GOOD JOB!", ":)", [
         {
           text: "Quit",
-          onPress: () => navigation.goBack(),
+          onPress: () => navigation.navigate({
+            didWin: didWin
+          }),
           style: "cancel",
         },
         { text: "Play Again", onPress: () => resetGame() },
